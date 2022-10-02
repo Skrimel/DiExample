@@ -1,18 +1,24 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class DiContainer
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	public readonly Dictionary<Type, object> Contracts = new();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public void Bind(object instance)
+	{
+		var type = instance.GetType();
+		
+		if (Contracts.ContainsKey(instance.GetType()))
+		{
+			throw new InvalidOperationException($"Type {type} is already binded!");
+		}
+		
+		Contracts.Add(type, instance);
+	}
+
+	public void Inject(object instance)
+	{
+		
+	}
 }
