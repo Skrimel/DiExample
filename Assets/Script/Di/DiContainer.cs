@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Script;
 
 public class DiContainer
 {
@@ -19,6 +21,11 @@ public class DiContainer
 
 	public void Inject(object instance)
 	{
-		
+		var fields = instance.GetType().GetFields().Where(i => i.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0);
+		foreach (var field in fields)
+		{
+			var fieldType = field.FieldType;
+			field.SetValue(instance, Contracts[fieldType]);
+		}
 	}
 }
