@@ -19,9 +19,17 @@ public class DiContainer
 		Contracts.Add(type, instance);
 	}
 
+	public TDependency Resolve<TDependency>()
+	{
+		return (TDependency)Contracts[typeof(TDependency)];
+	}
+
 	public void Inject(object instance)
 	{
-		var fields = instance.GetType().GetFields().Where(i => i.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0);
+		var fields = instance.GetType()
+			.GetFields()
+			.Where(i => i.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0);
+
 		foreach (var field in fields)
 		{
 			var fieldType = field.FieldType;
